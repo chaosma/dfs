@@ -11,9 +11,9 @@ import (
 	"os"
 )
 
-func multiHash(buf []byte) string {
+func multiHash(by []byte) string {
 	h := sha256.New()
-	if _, err := io.Copy(h, bytes.NewBuffer(buf)); err != nil {
+	if _, err := io.Copy(h, bytes.NewBuffer(by)); err != nil {
 		log.Fatal(err)
 	}
 	mh := h.Sum(nil)
@@ -24,12 +24,12 @@ func multiHash(buf []byte) string {
 
 func mhMain() {
 	filename := os.Args[1]
-	buf, err := ioutil.ReadFile(filename)
+	by, err := ioutil.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	res := multiHash(buf)
+	res := multiHash(by)
 	fmt.Printf("%s\n", res)
 
 }
