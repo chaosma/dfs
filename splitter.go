@@ -19,10 +19,10 @@ func (sp *splitter) NextBytes() ([]byte, error) {
 	case io.ErrUnexpectedEOF:
 		small := make([]byte, n)
 		copy(small, buf)
-		sp.remain -= n
+		sp.remain = sp.remain - uint32(n)
 		return small, nil
 	case nil:
-		sp.remain -= sp.size
+		sp.remain = sp.remain - sp.size
 		return buf, nil
 	case io.EOF:
 		return nil, nil

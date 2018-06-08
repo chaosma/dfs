@@ -37,3 +37,6 @@ func CreateNode(data []byte, typ Data_DataType) Node {
 	n.Size = uint32(len(data))
 	return n
 }
+
+func (n *Node) calcHash() {
+}

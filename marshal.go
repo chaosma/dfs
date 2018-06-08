@@ -7,6 +7,7 @@ import (
 )
 
 // Data and PBNode are two protobuf message struct
+// this only works for small data
 func marshal(by []byte, typ Data_DataType) []byte {
 	pbdata := new(Data)
 	pbdata.Type = &typ
