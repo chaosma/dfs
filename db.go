@@ -8,6 +8,9 @@ import (
 	"log"
 )
 
+var DBName string = "./dag.go.db"
+var BKName string = "dag"
+
 func encode(n *Node) []byte {
 	buf := bytes.Buffer{}
 	e := gob.NewEncoder(&buf)

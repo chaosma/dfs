@@ -38,6 +38,5 @@ func marshalSmallFile(filename string) string {
 
 	mdata := marshal(buf, Data_File)
 	mh := multiHash(mdata)
-
 	return mh
 }

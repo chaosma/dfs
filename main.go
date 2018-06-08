@@ -1,5 +1,10 @@
 package main
 
+import (
+	"os"
+)
+
 func main() {
-	mhMain()
+	filename := os.Args[1]
+	add(filename)
 }
