@@ -34,7 +34,7 @@ func fillNodeRec(sp *splitter, db *bolt.DB, root *Node, level int) error {
 		}
 		root = createNodeFromFile(data)
 		FlushNode(root, db, bk)
-		fmt.Println(root.getHash())
+		fmt.Printf("%v\t%v\n", root.getHash(), len(root.Encdata))
 		return nil
 	}
 
@@ -49,7 +49,7 @@ func fillNodeRec(sp *splitter, db *bolt.DB, root *Node, level int) error {
 	//createFSNode(data []byte, typ Data_DataType, filesize uint64, blocksizes []uint64)
 	root.setHash()
 	FlushNode(root, db, bk)
-	fmt.Println(root.getHash())
+	fmt.Printf("%v\t%v\n", root.getHash(), len(root.Encdata))
 
 	return nil
 }

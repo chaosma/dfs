@@ -4,7 +4,7 @@ import (
 	"io"
 )
 
-var CHUNKSIZE uint32 = 266144 // 256kb
+var CHUNKSIZE uint32 = 1024 * 256
 
 type splitter struct {
 	r      io.Reader

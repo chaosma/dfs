@@ -17,6 +17,12 @@ func add(filename string) {
 	sp.r = fh
 	sp.size = CHUNKSIZE
 
+	fi, err := fh.Stat()
+	if err != nil {
+		log.Fatal(err)
+	}
+	sp.remain = uint32(fi.Size())
+
 	db, err := bolt.Open(DBName, 0644, nil)
 	if err != nil {
 		log.Fatal(err)
