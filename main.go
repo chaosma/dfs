@@ -11,19 +11,26 @@ func main() {
 	cApp := cli.NewApp()
 	cApp.Name = "simpleIPFS"
 	cApp.Version = "0.1a"
-	cApp.Flags = []cli.Flag{}
-	filename := flag.String("filename", "", "a string")
-	hash := flag.String("hash", "", "a string")
-	addPtr := flag.Bool("add", false, "a bool")
-	getPtr := flag.Bool("links", false, "a bool")
+	cApp.Commands = []cli.Command{
+		{
+			Name:  "add",
+			Usage: "add a file",
+			Action: func(c *cli.Context) error {
 
-	flag.Parse()
-	if *addPtr {
-		add(*filename)
-	}
-
-	if *getPtr {
-		getLinks(*hash)
+				filename := c.Args().First()
+				err := add(filename)
+				return err
+			},
+		},
+		{
+			Name:  "links",
+			Usage: "get links of an object",
+			Action: func(c *cli.Context) error {
+				hash := c.Args().First()
+				err := getLinks(hash)
+				return err
+			},
+		},
 	}
 
 	err := cApp.Run(os.Args)

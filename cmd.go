@@ -3,13 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/boltdb/bolt"
-	"log"
 	//"math/rand"
 	"os"
 	//"time"
 )
 
-func add(filename string) {
+func add(filename string) error {
 
 	//	rand.Seed(time.Now().UnixNano())
 	//	i1 := rand.Intn(3)
@@ -18,7 +17,7 @@ func add(filename string) {
 
 	fh, err := os.Open(filename)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	sp := new(splitter)
@@ -27,33 +26,35 @@ func add(filename string) {
 
 	fi, err := fh.Stat()
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	sp.remain = uint32(fi.Size())
 
 	db, err := bolt.Open(DBName, 0644, nil)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer db.Close()
 
 	_, err = BuildDAG(sp, db)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	fh.Close()
+	return nil
 }
 
-func getLinks(hash string) {
+func getLinks(hash string) error {
 
 	db, err := bolt.Open(DBName, 0644, nil)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer db.Close()
 	n := GetNode(hash, db, BKName)
 	for _, l := range n.Links {
 		fmt.Printf("%v\t%v\n", l.Hash, l.Tsize)
 	}
+	return nil
 }
