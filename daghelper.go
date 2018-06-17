@@ -139,13 +139,17 @@ func (n *Node) getSize() uint64 {
 	return s
 }
 
-func (n *Node) setHash() {
+func (n *Node) calcHash() string {
 	pbnode := n.getPBNode()
 	mdata, err := proto.Marshal(pbnode)
 	if err != nil {
 		log.Fatal(err)
 	}
-	n.Hash = multiHash(mdata)
+	return multiHash(mdata)
+}
+
+func (n *Node) setHash() {
+	n.Hash = n.calcHash()
 }
 
 func (n *Node) getHash() string {

@@ -50,19 +50,23 @@ func FlushNode(n *Node, db *bolt.DB, bucketName string) {
 	}
 }
 
-func GetNode(hash string, db *bolt.DB, bucketName string) Node {
+func GetNode(hash string, db *bolt.DB, bucketName string) (*Node, error) {
 	key := []byte(hash)
 	var val []byte
 	err := db.View(func(tx *bolt.Tx) error {
 		bucket := tx.Bucket([]byte(bucketName))
 		if bucket == nil {
-			return fmt.Errorf("Bucket %s not found", bucketName)
+			return fmt.Errorf("Bucket %s not found\n", bucketName)
 		}
 		val = bucket.Get(key)
 		return nil
 	})
 	if err != nil {
-		log.Fatal(err)
+		return nil, fmt.Errorf("cannot retrieve object with hash %s from database\n", hash)
 	}
-	return decode(val)
+	n := decode(val)
+	if n.calcHash() != hash {
+		return nil, fmt.Errorf("object has different hash from %s\n", hash)
+	}
+	return &n, nil
 }
