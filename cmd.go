@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/boltdb/bolt"
+	"github.com/golang/protobuf/proto"
 	//"math/rand"
 	"os"
 	//"time"
@@ -57,4 +58,33 @@ func getLinks(hash string) error {
 		fmt.Printf("%v\t%v\n", l.Hash, l.Tsize)
 	}
 	return nil
+}
+
+func cat(hash string) error {
+	db, err := bolt.Open(DBName, 0644, nil)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	n := GetNode(hash, db, BKName)
+	by := []byte{}
+	var arr *[]byte = &by
+	dfs(db, &n, arr)
+	fmt.Printf("%s", *arr)
+	return nil
+}
+
+func dfs(db *bolt.DB, n *Node, arr *[]byte) {
+	if len(n.Links) == 0 {
+		pbdata := new(Data)
+		proto.Unmarshal(n.Encdata, pbdata)
+		*arr = append(*arr, pbdata.Data...)
+		return
+	}
+
+	for _, l := range n.Links {
+		m := GetNode(l.Hash, db, BKName)
+		dfs(db, &m, arr)
+	}
+	return
 }

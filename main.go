@@ -31,6 +31,15 @@ func main() {
 				return err
 			},
 		},
+		{
+			Name:  "cat",
+			Usage: "retrieve file from its hash",
+			Action: func(c *cli.Context) error {
+				hash := c.Args().First()
+				err := cat(hash)
+				return err
+			},
+		},
 	}
 
 	err := cApp.Run(os.Args)
