@@ -8,6 +8,7 @@ import (
 var bk string = BKName
 
 func BuildDAG(sp *splitter, db *bolt.DB) (*Node, error) {
+
 	var root *Node
 	for level := 0; !sp.done(); level++ {
 		nroot := new(Node)
@@ -22,6 +23,7 @@ func BuildDAG(sp *splitter, db *bolt.DB) (*Node, error) {
 		}
 		root = nroot
 	}
+	fmt.Printf("%v\t%v\n", root.getHash(), root.getSize())
 	return root, nil
 }
 
@@ -32,9 +34,8 @@ func fillNodeRec(sp *splitter, db *bolt.DB, root *Node, level int) error {
 		if err != nil {
 			return err
 		}
-		root = createNodeFromFile(data)
+		*root = *(createNodeFromFile(data))
 		FlushNode(root, db, bk)
-		fmt.Printf("%v\t%v\n", root.getHash(), len(root.Encdata))
 		return nil
 	}
 
@@ -47,9 +48,11 @@ func fillNodeRec(sp *splitter, db *bolt.DB, root *Node, level int) error {
 		root.addChild(child) // after fill the child node to get its hash full then add
 	}
 	//createFSNode(data []byte, typ Data_DataType, filesize uint64, blocksizes []uint64)
+	n := createFSNode([]byte{}, Data_File, root.Size, root.Blocksizes)
+	enc := n.marshal()
+	root.Encdata = enc
 	root.setHash()
 	FlushNode(root, db, bk)
-	fmt.Printf("%v\t%v\n", root.getHash(), len(root.Encdata))
 
 	return nil
 }

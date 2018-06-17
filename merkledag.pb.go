@@ -35,7 +35,7 @@ func (m *PBLink) Reset()         { *m = PBLink{} }
 func (m *PBLink) String() string { return proto.CompactTextString(m) }
 func (*PBLink) ProtoMessage()    {}
 func (*PBLink) Descriptor() ([]byte, []int) {
-	return fileDescriptor_merkledag_f1c29cb00b610d58, []int{0}
+	return fileDescriptor_merkledag_a6e8b43874a7e093, []int{0}
 }
 func (m *PBLink) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PBLink.Unmarshal(m, b)
@@ -91,7 +91,7 @@ func (m *PBNode) Reset()         { *m = PBNode{} }
 func (m *PBNode) String() string { return proto.CompactTextString(m) }
 func (*PBNode) ProtoMessage()    {}
 func (*PBNode) Descriptor() ([]byte, []int) {
-	return fileDescriptor_merkledag_f1c29cb00b610d58, []int{1}
+	return fileDescriptor_merkledag_a6e8b43874a7e093, []int{1}
 }
 func (m *PBNode) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PBNode.Unmarshal(m, b)
@@ -130,9 +130,9 @@ func init() {
 	proto.RegisterType((*PBNode)(nil), "main.PBNode")
 }
 
-func init() { proto.RegisterFile("merkledag.proto", fileDescriptor_merkledag_f1c29cb00b610d58) }
+func init() { proto.RegisterFile("merkledag.proto", fileDescriptor_merkledag_a6e8b43874a7e093) }
 
-var fileDescriptor_merkledag_f1c29cb00b610d58 = []byte{
+var fileDescriptor_merkledag_a6e8b43874a7e093 = []byte{
 	// 131 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xcf, 0x4d, 0x2d, 0xca,
 	0xce, 0x49, 0x4d, 0x49, 0x4c, 0xd7, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0xc9, 0x4d, 0xcc,

@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-var MaximumLinks int = 10
+var MaximumLinks int = 174
 
 type FSNode struct {
 	Rawdata    []byte
@@ -33,11 +33,17 @@ func (n *Node) addChild(that *Node) error {
 	if len(n.Links) > MaximumLinks {
 		return fmt.Errorf("maximum number of links %v reached", MaximumLinks)
 	}
-	l := Link{Name: "", Hash: that.Hash, Tsize: that.Size}
-	n.Links = append(n.Links, &l)
-	n.Size += that.Size
-	n.Blocksizes = append(n.Blocksizes, that.Size)
 
+	sz := that.getSize()
+	//rs := that.Size //same as that.getRawsize()
+	//	fmt.Println("rawsize: ", rs)
+	//	fmt.Println("cumsize: ", cs)
+	//	fmt.Println("totalsize: ", sz)
+
+	l := Link{Name: "", Hash: that.Hash, Tsize: sz}
+	n.Links = append(n.Links, &l)
+	n.Size += sz
+	n.Blocksizes = append(n.Blocksizes, sz)
 	return nil
 }
 
@@ -98,6 +104,39 @@ func (n *Node) getPBNode() *PBNode {
 		pbn.Data = n.Encdata
 	}
 	return pbn
+}
+
+func (n *Node) getRawsize() uint64 {
+	pbdata := new(Data)
+	proto.Unmarshal(n.Encdata, pbdata)
+	return uint64(len(pbdata.Data))
+}
+
+func (n *Node) getCumsize() uint64 {
+	s := uint64(len(n.Encdata))
+	for _, l := range n.Links {
+		s += l.Tsize
+	}
+	return s
+}
+
+func (n *Node) getBlocksize() uint64 {
+	s := uint64(len(n.Encdata))
+	return s
+}
+
+func (n *Node) getSize() uint64 {
+	pbn := n.getPBNode()
+	by, err := proto.Marshal(pbn)
+	if err != nil {
+		log.Fatal(err)
+	}
+	s := uint64(len(by))
+	for _, l := range n.Links {
+		s += l.Tsize
+	}
+
+	return s
 }
 
 func (n *Node) setHash() {
